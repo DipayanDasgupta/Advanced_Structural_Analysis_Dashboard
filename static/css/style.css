@@ -1,0 +1,448 @@
+/* static/css/style.css */
+:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --background-color: #f4f7f9; /* Lighter, slightly bluish-grey */
+    --card-background-color: #ffffff;
+    --text-color: #343a40;
+    --muted-text-color: #6c757d;
+    --border-color: #e0e6ed; /* Softer border */
+    --input-border-color: #ced4da;
+    --input-focus-border-color: #80bdff;
+    --input-focus-shadow-color: rgba(0, 123, 255, 0.25);
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --border-radius: 8px; /* Slightly larger radius */
+    --box-shadow: 0 5px 15px rgba(0,0,0,0.07); /* Softer, more spread shadow */
+
+    --control-label-width-desktop: 280px;
+    --control-label-width-tablet: 220px;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.65; /* Increased for better readability */
+    margin: 0;
+    padding: 25px; /* Overall padding */
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: var(--card-background-color);
+    padding: 35px; /* More padding inside main container */
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+h1, h2, h3, h4 {
+    color: var(--text-color);
+    margin-top: 1.2em;
+    margin-bottom: 0.8em;
+    font-weight: 600; /* Bolder headings */
+}
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.2em;
+    font-size: 2.4em;
+    letter-spacing: -0.5px; /* Subtle letter spacing */
+}
+h2 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.6em;
+    font-size: 1.9em;
+    font-weight: 500;
+}
+h3 {
+    font-size: 1.5em;
+    color: var(--text-color);
+    font-weight: 500;
+}
+h4 { /* Used for sub-titles within cards, like Element Type */
+    font-size: 1.2em;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-top: 0.5em;
+    margin-bottom: 0.8em;
+}
+
+
+.controls-main, .results-main {
+    margin-bottom: 40px;
+}
+
+fieldset {
+    border: 1px solid var(--border-color);
+    padding: 30px; /* More padding */
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    background-color: #fcfdff; /* Very light blue tint for fieldsets */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+legend {
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 5px 12px; /* Padding for legend text */
+    font-size: 1.25em;
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.control-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.control-group label {
+    flex-basis: var(--control-label-width-desktop);
+    margin-right: 20px; /* Increased margin */
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95em;
+}
+.control-group input[type="number"],
+.control-group input[type="range"],
+.control-group select {
+    padding: 12px 15px; /* Generous padding */
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--border-radius);
+    flex-grow: 1;
+    min-width: 180px;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    font-size: 1em; /* Consistent font size with body */
+    background-color: #fff;
+}
+.control-group input[type="number"]:focus,
+.control-group select:focus {
+    border-color: var(--input-focus-border-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem var(--input-focus-shadow-color);
+}
+.control-group input[type="range"] {
+    padding: 0;
+    cursor: pointer;
+}
+.control-group input[type="number"]:disabled,
+.control-group input[type="number"][readonly] {
+    background-color: #e9ecef;
+    opacity: 0.65; /* Slightly more opaque */
+    cursor: not-allowed;
+    border-color: #dde2e6; /* Lighter border for disabled */
+}
+#effLengthFactorKxContainer, #effLengthFactorKyContainer {
+    transition: opacity 0.35s ease; /* Smoother transition */
+}
+
+
+.control-group .value-display {
+    margin-left: 20px;
+    font-weight: 500;
+    color: var(--primary-color);
+    min-width: 110px;
+    font-size: 0.95em;
+    background-color: #e9f5ff; /* Light blue background for value displays */
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+.control-group small { /* Hint text */
+    flex-basis: 100%;
+    font-size: 0.85em;
+    color: var(--muted-text-color);
+    margin-top: 6px;
+    padding-left: calc(var(--control-label-width-desktop) + 20px);
+}
+
+
+button#calculateButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 220px;
+    padding: 14px 35px; /* Larger padding */
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1.15em;
+    font-weight: 600;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    margin: 25px auto 0;
+    box-shadow: 0 3px 6px rgba(0, 123, 255, 0.25); /* Shadow matching primary color */
+}
+button#calculateButton:hover:not(:disabled) {
+    background-color: var(--primary-hover-color);
+    box-shadow: 0 5px 10px rgba(0, 123, 255, 0.3);
+    transform: translateY(-2px);
+}
+button#calculateButton:active:not(:disabled) {
+    transform: translateY(0px);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+button#calculateButton:disabled {
+    background-color: var(--muted-text-color);
+    cursor: wait;
+    box-shadow: none;
+    transform: translateY(0);
+}
+button#calculateButton .spinner {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    border: 3px solid rgba(255,255,255,.35);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.7s linear infinite; /* Slightly faster spin */
+    margin-right: 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-message {
+    background-color: #ffebee; /* Lighter red background */
+    color: #c62828; /* Darker red text */
+    padding: 18px 22px;
+    border: 1px solid #ef9a9a;
+    border-left: 6px solid var(--danger-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 25px;
+    font-size: 1em;
+    font-weight: 500;
+}
+.error-message::before {
+    content: "⚠️ "; /* Standard warning icon */
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+
+.summary, .failure-checks-container, .detailed-output, .diagram-container, #crossSectionStressInfo {
+    background-color: var(--card-background-color);
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: var(--box-shadow);
+}
+.summary p { /* Not .failure-checks-container p */
+    margin: 10px 0;
+    font-size: 1.05em; /* Slightly larger text in summary */
+    line-height: 1.7;
+}
+.summary h4 { /* For "Element: BEAM" */
+    margin-top:0;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.failure-checks-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+.failure-checks-container li {
+    padding: 15px; /* Increased padding */
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+.failure-checks-container li:hover {
+    background-color: #f8f9fa;
+}
+.failure-checks-container li:last-child {
+    border-bottom: none;
+}
+.failure-checks-container li strong { /* Check Title */
+    flex-basis: 250px; /* More space */
+    font-weight: 500;
+    color: var(--text-color);
+}
+.failure-checks-container li span.status { /* PASS/FAIL Badge */
+    font-weight: bold;
+    padding: 5px 12px; /* More padding for badge */
+    border-radius: 15px; /* Pill shape */
+    font-size: 0.85em;
+    min-width: 70px;
+    text-align: center;
+    color: white;
+    margin-left: 10px;
+    letter-spacing: 0.5px;
+}
+.status-pass { background-color: var(--success-color); }
+.status-fail { background-color: var(--danger-color); }
+
+.failure-checks-container li .details { /* Ratio, Demand, Capacity */
+    font-size: 0.9em;
+    color: var(--muted-text-color);
+    margin-left: auto;
+    padding-left: 15px;
+    text-align: right;
+    flex-grow: 1; /* Allow it to take remaining space */
+}
+.status-note {
+    color: var(--muted-text-color);
+    font-style: italic;
+    font-size: 0.85em;
+    flex-basis: 100%;
+    margin-top: 8px;
+    padding-left: 20px; /* Indent note */
+}
+.status-note::before {
+    content: "ℹ️ "; /* Info icon */
+    margin-right: 3px;
+}
+
+
+#sfdPlot, #bmdPlot, #deflectionPlot {
+    width: 100%;
+    height: 400px;
+    border: 1px solid var(--border-color); /* Using var for consistency */
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    /* background handled by Plotly JS config */
+}
+
+
+.diagram-container canvas {
+    max-width: 100%;
+    border: 1px solid var(--input-border-color);
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06) inset;
+}
+.diagram-container h3 { /* Titles for canvas diagrams */
+    margin-top:0;
+    margin-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.3em;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.cross-section-visualization {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Increased gap */
+    margin-bottom: 30px;
+}
+.cross-section-visualization .diagram-container {
+    flex: 1;
+    min-width: 300px;
+}
+#crossSectionStressInfo {
+    flex: 1.3; /* Give text info a bit more space */
+    min-width: 320px;
+}
+#crossSectionStressInfo h4 { /* Title for stress info text */
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+    font-size: 1.15em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+#crossSectionStressInfo p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 0.95em;
+}
+
+
+pre#jsonOutput {
+    background: #2d3748; /* Darker, desaturated blue */
+    color: #e2e8f0; /* Lighter grey text */
+    padding: 20px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    font-size: 0.9em;
+    max-height: 400px;
+    border: 1px solid #4a5568; /* Border matching background */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1) inset;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) { /* Tablet */
+    .control-group label {
+        flex-basis: var(--control-label-width-tablet);
+    }
+    .control-group small {
+        padding-left: calc(var(--control-label-width-tablet) + 20px);
+    }
+    .cross-section-visualization {
+        flex-direction: column;
+    }
+     h1 { font-size: 2em; }
+    h2 { font-size: 1.7em; }
+    h3 { font-size: 1.35em; }
+}
+
+@media (max-width: 768px) { /* Mobile */
+    body { padding: 15px; }
+    .container { padding: 20px; margin: 10px auto; }
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.25em; }
+
+    .control-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .control-group label {
+        margin-bottom: 8px;
+        flex-basis: auto;
+        margin-right: 0;
+    }
+    .control-group .value-display {
+        margin-left: 0;
+        margin-top: 8px;
+        text-align: left; /* Align value left for consistency */
+        display: inline-block; /* Allow it to size to content */
+        width: auto;
+    }
+    .control-group small {
+        padding-left: 0;
+        margin-top: 8px;
+    }
+    .failure-checks-container li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .failure-checks-container li strong {
+        margin-bottom: 8px;
+    }
+    .failure-checks-container li span.status {
+        align-self: flex-start;
+        margin-left: 0;
+        margin-bottom: 8px;
+    }
+    .failure-checks-container li .details {
+        text-align: left;
+        margin-left: 0;
+        padding-left: 0;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    button#calculateButton {
+        width: 100%;
+        padding: 12px 20px; /* Adjust padding for full width */
+    }
+    #sfdPlot, #bmdPlot, #deflectionPlot {
+        height: 320px; /* Shorter plots on mobile */
+    }
+}

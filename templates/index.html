@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Structural Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Make sure Plotly source is correct based on your setup (CDN or local) -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+    <!-- <script src="{{ url_for('static', filename='lib/plotly.min.js') }}"></script> -->
+</head>
+<body>
+    <div class="container">
+        <h1>Advanced Structural Simulator</h1>
+
+        <div class="controls-main">
+            <!-- Element Type Selection -->
+            <div class="control-group">
+                <label for="elementTypeSelect">Element Type:</label>
+                <select id="elementTypeSelect">
+                    <option value="beam">Beam</option>
+                    <option value="column">Column</option>
+                </select>
+            </div>
+
+            <!-- Common Properties -->
+            <fieldset id="commonProps">
+                <legend>Common Properties</legend>
+                <div class="control-group">
+                    <label for="length">Length (L, m):</label>
+                    <input type="number" id="length" value="5" step="0.1" min="0.1">
+                    <span class="value-display" id="lengthValue">5.0 m</span>
+                </div>
+                <div class="control-group">
+                    <label for="materialSelect">Material:</label>
+                    <select id="materialSelect">
+                        {% for mat_name in material_names %}
+                        <option value="{{ mat_name }}" {% if mat_name == 'steel_generic_s275' %}selected{% endif %}>{{ mat_name.replace('_', ' ').title() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </fieldset>
+
+            <!-- Cross-Section Properties -->
+            <fieldset id="crossSectionProps">
+                <legend>Cross-Section</legend>
+                <div class="control-group">
+                    <label for="sectionTypeSelect">Section Type:</label>
+                    <select id="sectionTypeSelect">
+                        <option value="rectangular" selected>Rectangular</option>
+                        <option value="circular">Circular</option>
+                    </select>
+                </div>
+                <div id="rectangularParams" class="section-params">
+                    <div class="control-group">
+                        <label for="rectWidth">Width (b, mm):</label>
+                        <input type="number" id="rectWidth" value="100" step="1" min="1">
+                        <span class="value-display" id="rectWidthValue">100 mm</span>
+                    </div>
+                    <div class="control-group">
+                        <label for="rectHeight">Height (h, mm):</label>
+                        <input type="number" id="rectHeight" value="200" step="1" min="1">
+                        <span class="value-display" id="rectHeightValue">200 mm</span>
+                    </div>
+                </div>
+                <div id="circularParams" class="section-params" style="display:none;">
+                    <div class="control-group">
+                        <label for="circDiameter">Diameter (d, mm):</label>
+                        <input type="number" id="circDiameter" value="150" step="1" min="1">
+                        <span class="value-display" id="circDiameterValue">150 mm</span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Beam Specific Inputs -->
+            <fieldset id="beamInputs" class="element-specific-inputs">
+                <legend>Beam Setup</legend>
+                <div class="control-group">
+                    <label for="beamSupportType">Support Type:</label>
+                    <select id="beamSupportType">
+                        <option value="simplySupported" selected>Simply Supported</option>
+                        <option value="cantilever">Cantilever (Fixed Left)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="beamLoadType">Load Type:</label>
+                    <select id="beamLoadType">
+                        <option value="pointLoad" data-support="simplySupported" selected>Point Load</option>
+                        <option value="udl" data-support="simplySupported">Uniformly Distributed Load (UDL)</option>
+                        <option value="pointLoadEnd" data-support="cantilever">Point Load at Free End</option>
+                        <option value="udl" data-support="cantilever">Uniformly Distributed Load (UDL)</option>
+                        <!-- Add data-support="cantilever" for UDL on cantilever if it wasn't there -->
+                    </select>
+                </div>
+                <div id="beamPointLoadInputs">
+                    <div class="control-group">
+                        <label for="pointLoad">Point Load (P, kN):</label>
+                        <input type="number" id="pointLoad" value="10" step="0.1" min="-1000" max="1000">
+                        <span class="value-display" id="pointLoadValue">10.0 kN</span>
+                        <small>(+ve downwards)</small>
+                    </div>
+                    <div class="control-group" id="pointLoadPositionContainer">
+                        <label for="pointLoadPositionRatio">Load Position (a/L):</label>
+                        <input type="range" id="pointLoadPositionRatio" value="0.5" step="0.01" min="0.01" max="0.99">
+                        <span class="value-display" id="pointLoadPositionRatioValue">0.50 (Mid-span)</span>
+                    </div>
+                </div>
+                <div id="beamUdlInputs" style="display:none;">
+                    <div class="control-group">
+                        <label for="udlValue">UDL (w, kN/m):</label>
+                        <input type="number" id="udlValue" value="5" step="0.1" min="-1000" max="1000">
+                        <span class="value-display" id="udlValueDisplay">5.0 kN/m</span>
+                         <small>(+ve downwards)</small>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Column Specific Inputs -->
+            <fieldset id="columnInputs" class="element-specific-inputs" style="display:none;">
+                <legend>Column Setup</legend>
+                <div class="control-group">
+                    <label for="axialLoad">Axial Compressive Load (P, kN):</label>
+                    <input type="number" id="axialLoad" value="100" step="1" min="0"> <!-- Assuming comp. load is always positive input -->
+                    <span class="value-display" id="axialLoadValue">100 kN</span>
+                    <small>(Compression is +ve)</small>
+                </div>
+                <div class="control-group">
+                    <label for="columnEndConditionSelect">End Conditions (Kx, Ky):</label>
+                    <select id="columnEndConditionSelect">
+                        <option value="1.0,1.0" selected>Pinned-Pinned (K=1.0)</option>
+                        <option value="0.5,0.5">Fixed-Fixed (K=0.5)</option>
+                        <option value="0.7,0.7">Fixed-Pinned (K=0.7)</option> <!-- Standard is ~0.699, often rounded to 0.7 -->
+                        <option value="2.0,2.0">Fixed-Free (Cantilever) (K=2.0)</option>
+                        <!-- Example for different Kx, Ky. You might want more descriptive options -->
+                        <option value="0.7,1.0">Fixed-Pinned (X-axis) / Pinned-Pinned (Y-axis)</option>
+                        <option value="custom">Custom Kx, Ky</option>
+                    </select>
+                </div>
+                <div class="control-group" id="effLengthFactorKxContainer">
+                    <label for="effLengthFactorKx">Effective Length Factor (Kx):</label>
+                    <input type="number" id="effLengthFactorKx" value="1.0" step="0.05" min="0.1" max="10.0"> <!-- Min K typically > 0 for stability -->
+                    <span class="value-display" id="effLengthFactorKxValue">1.0</span>
+                    <small>Relates to buckling about strong axis.</small>
+                </div>
+                <div class="control-group" id="effLengthFactorKyContainer">
+                    <label for="effLengthFactorKy">Effective Length Factor (Ky):</label>
+                    <input type="number" id="effLengthFactorKy" value="1.0" step="0.05" min="0.1" max="10.0">
+                    <span class="value-display" id="effLengthFactorKyValue">1.0</span>
+                    <small>Relates to buckling about weak axis.</small>
+                </div>
+                 <small style="text-align: center; width:100%; margin-top: 5px;">Select standard end conditions or choose 'Custom' to input Kx, Ky directly.</small>
+            </fieldset>
+            
+            <button id="calculateButton">Calculate & Visualize</button>
+        </div>
+
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid var(--border-color);">
+
+        <div class="results-main">
+            <h2>Results & Visualizations</h2>
+            <div id="errorDisplay" class="error-message" style="display:none;"></div>
+            
+            <div id="summaryResults" class="summary">
+                <!-- Summary will be populated here -->
+            </div>
+            
+            <div class="diagram-container">
+                <h3>Element Diagram</h3>
+                <canvas id="elementDiagramCanvas" width="800" height="250"></canvas> 
+                <!-- Increased height slightly for UDL space -->
+            </div>
+            
+            <div class="cross-section-visualization">
+                <div class="diagram-container">
+                    <h3>Cross-section Stress</h3>
+                    <canvas id="crossSectionCanvas" width="280" height="320"></canvas> 
+                </div>
+                <div id="crossSectionStressInfo">
+                    <!-- Stress text info populated by JS -->
+                </div>
+            </div>
+
+
+            <div id="beamPlots" style="display:none;"> <!-- This div itself doesn't need card styling if plots are inside -->
+                <div class="diagram-container plotly-container"> <!-- Wrap plots for consistent titling/spacing -->
+                    <h3>Shear Force Diagram (SFD)</h3>
+                    <div id="sfdPlot"></div>
+                </div>
+                <div class="diagram-container plotly-container">
+                    <h3>Bending Moment Diagram (BMD)</h3>
+                    <div id="bmdPlot"></div>
+                </div>
+                <div class="diagram-container plotly-container">
+                    <h3>Deflection Diagram</h3>
+                    <div id="deflectionPlot"></div>
+                </div>
+            </div>
+            
+            <div id="columnPlots" style="display:none;">
+                <!-- Content for column-specific plots if any, or just info -->
+                 <p style="text-align:center; color: var(--muted-text-color);">Column buckling behavior is visualized in the Element Diagram and summarized in results.</p>
+            </div>
+            
+            <div id="failureChecks" class="failure-checks-container">
+                <h3>Failure Checks</h3>
+                <div id="failureChecksList">
+                    <!-- Populated by JS like:
+                    <li>
+                        <strong>CHECK NAME:</strong>
+                        <span class="status status-pass/status-fail">PASS/FAIL</span>
+                        <span class="details">Ratio: 0.5 | Demand: X | Capacity: Y</span>
+                        <small class="status-note">Optional note here</small>
+                    </li>
+                    -->
+                </div>
+            </div>
+
+            <div id="detailedOutput" class="detailed-output">
+                 <h3>Detailed Output (JSON)</h3>
+                 <pre id="jsonOutput"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
