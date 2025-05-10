@@ -1,126 +1,217 @@
 /* static/css/style.css */
 :root {
+    /* Light Mode (Default) */
     --primary-color: #007bff;
     --primary-hover-color: #0056b3;
+    --primary-active-color: #004085;
     --background-color: #f4f7f9; /* Lighter, slightly bluish-grey */
     --card-background-color: #ffffff;
     --text-color: #343a40;
+    --text-color-light: #495057; /* For less prominent text on light bg */
     --muted-text-color: #6c757d;
-    --border-color: #e0e6ed; /* Softer border */
+    --border-color: #dee2e6; /* Standard border */
     --input-border-color: #ced4da;
+    --input-background-color: #ffffff;
+    --input-disabled-background-color: #e9ecef;
+    --input-disabled-border-color: #dde2e6;
     --input-focus-border-color: #80bdff;
     --input-focus-shadow-color: rgba(0, 123, 255, 0.25);
     --success-color: #28a745;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --link-color: var(--primary-color);
 
     --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --border-radius: 8px; /* Slightly larger radius */
-    --box-shadow: 0 5px 15px rgba(0,0,0,0.07); /* Softer, more spread shadow */
+    --border-radius: 8px;
+    --box-shadow: 0 6px 18px rgba(0,0,0,0.08); /* Softer, more spread shadow */
+    --box-shadow-hover: 0 8px 22px rgba(0,0,0,0.1);
+    --box-shadow-inset: 0 2px 5px rgba(0,0,0,0.06) inset;
 
     --control-label-width-desktop: 280px;
     --control-label-width-tablet: 220px;
+
+    /* Diagram specific colors (Light Mode) */
+    --diagram-support-color: #2c3e50;
+    --diagram-load-color: #e74c3c;
+    --diagram-udl-color: #27ae60;
+    --diagram-deflected-shape-color: var(--primary-hover-color);
+    --diagram-buckled-shape-color: var(--danger-color);
+    --diagram-dimension-line-color: var(--muted-text-color);
+    --diagram-neutral-axis-color: rgba(0, 100, 200, 0.65);
+    --diagram-grid-line-color: var(--border-color);
+    --diagram-text-color: var(--text-color-light);
+
+    /* Stress colors */
+    --stress-tension-color-max: rgb(255, 100, 100);
+    --stress-compression-color-max: rgb(100, 100, 255);
+    --stress-neutral-color: rgb(238, 238, 238);
 }
+
+[data-theme="dark"] {
+    --primary-color: #3eadff;
+    --primary-hover-color: #6ec1ff;
+    --primary-active-color: #1a9cff;
+    --background-color: #121212; /* Very dark background */
+    --card-background-color: #1e1e1e; /* Dark card */
+    --text-color: #e0e0e0; /* Light text */
+    --text-color-light: #b0b0b0;
+    --muted-text-color: #888888;
+    --border-color: #333333; /* Darker borders */
+    --input-border-color: #444444;
+    --input-background-color: #2a2a2a;
+    --input-disabled-background-color: #2c2c2c;
+    --input-disabled-border-color: #383838;
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-shadow-color: rgba(62, 173, 255, 0.35);
+    --success-color: #48bb78;
+    --danger-color: #f56565;
+    --warning-color: #f6ad55;
+    --info-color: #4fd1c5;
+    --link-color: var(--primary-color);
+
+    --box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    --box-shadow-hover: 0 8px 22px rgba(0,0,0,0.35);
+    --box-shadow-inset: 0 2px 5px rgba(0,0,0,0.2) inset;
+
+    /* Diagram specific colors (Dark Mode) */
+    --diagram-support-color: #a0aec0; /* Lighter grey */
+    --diagram-load-color: #fc8181; /* Lighter red */
+    --diagram-udl-color: #68d391; /* Lighter green */
+    --diagram-deflected-shape-color: var(--primary-hover-color);
+    --diagram-buckled-shape-color: var(--danger-color);
+    --diagram-dimension-line-color: var(--muted-text-color);
+    --diagram-neutral-axis-color: rgba(135, 206, 250, 0.7);
+    --diagram-grid-line-color: var(--border-color);
+    --diagram-text-color: var(--text-color-light);
+
+    /* Stress colors for Dark Mode */
+    --stress-tension-color-max: rgb(255, 130, 130); /* Brighter for dark bg */
+    --stress-compression-color-max: rgb(130, 130, 255); /* Brighter for dark bg */
+    --stress-neutral-color: rgb(50, 50, 55);
+}
+
+/* --- Base & Global Styles --- */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     font-family: var(--font-family);
-    line-height: 1.65; /* Increased for better readability */
+    line-height: 1.65;
     margin: 0;
-    padding: 25px; /* Overall padding */
+    padding: 25px;
     background-color: var(--background-color);
     color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px; /* Base font size */
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1250px; /* Slightly wider */
     margin: 20px auto;
     background: var(--card-background-color);
-    padding: 35px; /* More padding inside main container */
+    padding: 30px 40px; /* More horizontal padding */
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 h1, h2, h3, h4 {
     color: var(--text-color);
-    margin-top: 1.2em;
+    margin-top: 1.5em; /* More top margin */
     margin-bottom: 0.8em;
-    font-weight: 600; /* Bolder headings */
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 h1 {
     text-align: center;
     color: var(--primary-color);
     margin-bottom: 1.2em;
-    font-size: 2.4em;
-    letter-spacing: -0.5px; /* Subtle letter spacing */
+    font-size: 2.5em; /* Larger main title */
+    letter-spacing: -0.5px;
 }
 h2 {
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.6em;
-    font-size: 1.9em;
+    font-size: 2em; /* Larger section titles */
     font-weight: 500;
+    transition: border-color 0.3s ease;
 }
 h3 {
-    font-size: 1.5em;
-    color: var(--text-color);
+    font-size: 1.6em;
     font-weight: 500;
 }
-h4 { /* Used for sub-titles within cards, like Element Type */
-    font-size: 1.2em;
+h4 {
+    font-size: 1.25em;
     color: var(--primary-color);
     font-weight: 600;
     margin-top: 0.5em;
-    margin-bottom: 0.8em;
+    margin-bottom: 1em;
+}
+hr {
+    margin: 50px 0;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+a:hover {
+    text-decoration: underline;
+    color: var(--primary-hover-color);
 }
 
-
-.controls-main, .results-main {
-    margin-bottom: 40px;
-}
+/* --- Forms & Controls --- */
+.controls-main { margin-bottom: 40px; }
 
 fieldset {
     border: 1px solid var(--border-color);
-    padding: 30px; /* More padding */
+    padding: 25px 30px;
     margin-bottom: 30px;
     border-radius: var(--border-radius);
-    background-color: #fcfdff; /* Very light blue tint for fieldsets */
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    background-color: var(--card-background-color); /* Fieldsets now match card bg */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05); /* Subtle shadow for fieldset */
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 legend {
     font-weight: 600;
     color: var(--primary-color);
-    padding: 5px 12px; /* Padding for legend text */
-    font-size: 1.25em;
-    background-color: var(--card-background-color);
+    padding: 6px 15px;
+    font-size: 1.3em;
+    background-color: var(--background-color); /* Legend bg matches page bg */
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .control-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
 .control-group label {
     flex-basis: var(--control-label-width-desktop);
-    margin-right: 20px; /* Increased margin */
+    margin-right: 20px;
     font-weight: 500;
-    color: var(--text-color);
-    font-size: 0.95em;
+    color: var(--text-color-light);
+    font-size: 0.98em; /* Slightly larger label text */
+    transition: color 0.3s ease;
 }
 .control-group input[type="number"],
 .control-group input[type="range"],
 .control-group select {
-    padding: 12px 15px; /* Generous padding */
+    padding: 12px 15px;
     border: 1px solid var(--input-border-color);
+    background-color: var(--input-background-color);
+    color: var(--text-color);
     border-radius: var(--border-radius);
     flex-grow: 1;
     min-width: 180px;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    font-size: 1em; /* Consistent font size with body */
-    background-color: #fff;
+    font-size: 1em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
 }
 .control-group input[type="number"]:focus,
 .control-group select:focus {
@@ -128,38 +219,41 @@ legend {
     outline: 0;
     box-shadow: 0 0 0 0.2rem var(--input-focus-shadow-color);
 }
-.control-group input[type="range"] {
-    padding: 0;
-    cursor: pointer;
-}
+.control-group input[type="range"] { padding: 0; cursor: pointer; }
 .control-group input[type="number"]:disabled,
 .control-group input[type="number"][readonly] {
-    background-color: #e9ecef;
-    opacity: 0.65; /* Slightly more opaque */
+    background-color: var(--input-disabled-background-color);
+    border-color: var(--input-disabled-border-color);
+    opacity: 0.7;
     cursor: not-allowed;
-    border-color: #dde2e6; /* Lighter border for disabled */
 }
 #effLengthFactorKxContainer, #effLengthFactorKyContainer {
-    transition: opacity 0.35s ease; /* Smoother transition */
+    transition: opacity 0.35s ease;
 }
-
-
 .control-group .value-display {
     margin-left: 20px;
     font-weight: 500;
     color: var(--primary-color);
     min-width: 110px;
     font-size: 0.95em;
-    background-color: #e9f5ff; /* Light blue background for value displays */
-    padding: 5px 10px;
+    background-color: var(--input-background-color); /* Match input bg */
+    padding: 6px 12px;
     border-radius: 4px;
+    border: 1px solid var(--input-border-color); /* Give it a border like inputs */
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 .control-group small { /* Hint text */
     flex-basis: 100%;
-    font-size: 0.85em;
+    font-size: 0.88em;
     color: var(--muted-text-color);
-    margin-top: 6px;
+    margin-top: 8px;
     padding-left: calc(var(--control-label-width-desktop) + 20px);
+    transition: color 0.3s ease;
+}
+.control-group small::before {
+    content: "ℹ️ "; /* Info icon */
+    margin-right: 4px;
+    opacity: 0.7;
 }
 
 
@@ -168,281 +262,293 @@ button#calculateButton {
     align-items: center;
     justify-content: center;
     width: auto;
-    min-width: 220px;
-    padding: 14px 35px; /* Larger padding */
+    min-width: 240px; /* Slightly wider */
+    padding: 15px 40px; /* More padding */
     background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    font-size: 1.15em;
+    font-size: 1.2em; /* Larger font */
     font-weight: 600;
     transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-    margin: 25px auto 0;
-    box-shadow: 0 3px 6px rgba(0, 123, 255, 0.25); /* Shadow matching primary color */
+    margin: 30px auto 0;
+    box-shadow: 0 4px 10px rgba(0,123,255,0.25); /* Default state shadow */
 }
 button#calculateButton:hover:not(:disabled) {
     background-color: var(--primary-hover-color);
-    box-shadow: 0 5px 10px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 6px 14px rgba(0,123,255,0.3);
     transform: translateY(-2px);
 }
 button#calculateButton:active:not(:disabled) {
+    background-color: var(--primary-active-color);
     transform: translateY(0px);
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 2px 6px rgba(0,123,255,0.2);
 }
 button#calculateButton:disabled {
     background-color: var(--muted-text-color);
+    color: var(--text-color); /* Ensure text is visible on muted bg */
+    opacity: 0.6;
     cursor: wait;
     box-shadow: none;
     transform: translateY(0);
 }
 button#calculateButton .spinner {
+    border: 3px solid rgba(255,255,255,.4); /* Ensure spinner visible on primary color */
+    border-top-color: #fff;
+    /* ... rest of spinner styles ... */
     display: inline-block;
     width: 1.2em;
     height: 1.2em;
-    border: 3px solid rgba(255,255,255,.35);
     border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 0.7s linear infinite; /* Slightly faster spin */
+    animation: spin 0.7s linear infinite;
     margin-right: 10px;
 }
+button#calculateButton:disabled .spinner { /* Spinner on disabled button */
+    border: 3px solid rgba(0,0,0,.2); /* Adapts to text color of disabled button */
+    border-top-color: var(--text-color);
+}
+
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.error-message {
-    background-color: #ffebee; /* Lighter red background */
-    color: #c62828; /* Darker red text */
-    padding: 18px 22px;
-    border: 1px solid #ef9a9a;
-    border-left: 6px solid var(--danger-color);
-    border-radius: var(--border-radius);
-    margin-bottom: 25px;
-    font-size: 1em;
-    font-weight: 500;
-}
-.error-message::before {
-    content: "⚠️ "; /* Standard warning icon */
-    font-weight: bold;
-    margin-right: 5px;
-}
+/* --- Results & Visualizations --- */
+.results-main { margin-bottom: 40px; }
 
-
-.summary, .failure-checks-container, .detailed-output, .diagram-container, #crossSectionStressInfo {
+.summary, .failure-checks-container, .detailed-output, .diagram-container, #crossSectionStressInfo, .plotly-container {
     background-color: var(--card-background-color);
-    padding: 25px;
+    padding: 28px 32px; /* Generous padding */
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    margin-bottom: 30px;
+    margin-bottom: 35px; /* More spacing between cards */
     box-shadow: var(--box-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.summary p { /* Not .failure-checks-container p */
-    margin: 10px 0;
-    font-size: 1.05em; /* Slightly larger text in summary */
-    line-height: 1.7;
+.summary p {
+    margin: 12px 0;
+    font-size: 1.08em;
+    line-height: 1.75;
+    color: var(--text-color-light);
+    transition: color 0.3s ease;
 }
-.summary h4 { /* For "Element: BEAM" */
+.summary p strong {
+    color: var(--text-color);
+    font-weight: 500;
+}
+.summary h4 { /* Element Type in Summary */
     margin-top:0;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
     color: var(--primary-color);
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
+    font-size: 1.35em;
 }
 
-.failure-checks-container ul {
-    list-style: none;
-    padding-left: 0;
-}
+/* Failure Checks */
+.failure-checks-container ul { list-style: none; padding-left: 0; }
 .failure-checks-container li {
-    padding: 15px; /* Increased padding */
+    padding: 18px 15px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.3s ease;
 }
-.failure-checks-container li:hover {
-    background-color: #f8f9fa;
-}
-.failure-checks-container li:last-child {
-    border-bottom: none;
-}
+.failure-checks-container li:hover { background-color: var(--background-color); }
+.failure-checks-container li:last-child { border-bottom: none; }
 .failure-checks-container li strong { /* Check Title */
-    flex-basis: 250px; /* More space */
+    flex-basis: 280px; /* More space */
     font-weight: 500;
     color: var(--text-color);
+    font-size: 1.05em;
 }
 .failure-checks-container li span.status { /* PASS/FAIL Badge */
-    font-weight: bold;
-    padding: 5px 12px; /* More padding for badge */
-    border-radius: 15px; /* Pill shape */
-    font-size: 0.85em;
-    min-width: 70px;
+    font-weight: 600; /* Bolder badge text */
+    padding: 6px 14px;
+    border-radius: 18px; /* More pill-like */
+    font-size: 0.88em;
+    min-width: 80px;
     text-align: center;
-    color: white;
+    color: white !important; /* Ensure white text on colored bg */
     margin-left: 10px;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
-.status-pass { background-color: var(--success-color); }
-.status-fail { background-color: var(--danger-color); }
-
+.status-pass { background-color: var(--success-color) !important; } /* Use important for override if needed */
+.status-fail { background-color: var(--danger-color) !important; }
 .failure-checks-container li .details { /* Ratio, Demand, Capacity */
-    font-size: 0.9em;
+    font-size: 0.92em;
     color: var(--muted-text-color);
     margin-left: auto;
     padding-left: 15px;
     text-align: right;
-    flex-grow: 1; /* Allow it to take remaining space */
+    flex-grow: 1;
+    transition: color 0.3s ease;
 }
 .status-note {
     color: var(--muted-text-color);
     font-style: italic;
-    font-size: 0.85em;
+    font-size: 0.88em;
     flex-basis: 100%;
-    margin-top: 8px;
-    padding-left: 20px; /* Indent note */
+    margin-top: 10px;
+    padding-left: 20px;
+    transition: color 0.3s ease;
 }
-.status-note::before {
-    content: "ℹ️ "; /* Info icon */
-    margin-right: 3px;
+.status-note::before { content: "ℹ️ "; margin-right: 3px; opacity: 0.8; }
+
+/* Error Message */
+.error-message {
+    background-color: var(--danger-color);
+    color: white; /* White text on danger bg */
+    padding: 18px 22px;
+    border: 1px solid var(--danger-color);
+    border-left: 6px solid darken(var(--danger-color), 10%); /* Darken for emphasis */
+    border-radius: var(--border-radius);
+    margin-bottom: 25px;
+    font-size: 1.05em;
+    font-weight: 500;
+    box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3); /* Shadow matching danger color */
 }
+.error-message::before { content: "⚠️ "; font-weight: bold; margin-right: 8px; }
 
 
-#sfdPlot, #bmdPlot, #deflectionPlot {
+/* Diagrams (Plotly & Canvas) */
+#sfdPlot, #bmdPlot, #deflectionPlot { /* These are the Plotly divs */
     width: 100%;
-    height: 400px;
-    border: 1px solid var(--border-color); /* Using var for consistency */
-    margin-bottom: 30px;
-    border-radius: var(--border-radius);
-    /* background handled by Plotly JS config */
+    height: 420px; /* Taller plots */
+    /* Background handled by Plotly JS using CSS vars */
 }
-
-
-.diagram-container canvas {
+.diagram-container canvas { /* Canvas specific styling */
     max-width: 100%;
-    border: 1px solid var(--input-border-color);
-    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background-color); /* Canvas bg matches card */
     border-radius: var(--border-radius);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.06) inset;
+    box-shadow: var(--box-shadow-inset);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.diagram-container h3 { /* Titles for canvas diagrams */
+.diagram-container h3, .plotly-container h3 { /* Titles for canvas/plotly diagrams */
     margin-top:0;
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* More space below title */
     width: 100%;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 1.4em;
     color: var(--primary-color);
     font-weight: 500;
 }
 
+/* Cross Section Visualization Area */
 .cross-section-visualization {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px; /* Increased gap */
+    gap: 30px;
     margin-bottom: 30px;
+    align-items: flex-start; /* Align items to top */
 }
-.cross-section-visualization .diagram-container {
-    flex: 1;
-    min-width: 300px;
-}
+.cross-section-visualization .diagram-container { flex: 1; min-width: 300px; }
 #crossSectionStressInfo {
-    flex: 1.3; /* Give text info a bit more space */
+    flex: 1.3;
     min-width: 320px;
 }
-#crossSectionStressInfo h4 { /* Title for stress info text */
+#crossSectionStressInfo h4 {
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     color: var(--primary-color);
-    font-size: 1.15em;
+    font-size: 1.2em;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     font-weight: 500;
 }
 #crossSectionStressInfo p {
     margin-bottom: 10px;
-    line-height: 1.6;
-    font-size: 0.95em;
+    line-height: 1.65;
+    font-size: 0.98em;
+    color: var(--text-color-light);
+    transition: color 0.3s ease;
+}
+#crossSectionStressInfo p strong {
+    color: var(--text-color);
+    font-weight: 500;
 }
 
-
+/* JSON Output */
 pre#jsonOutput {
-    background: #2d3748; /* Darker, desaturated blue */
-    color: #e2e8f0; /* Lighter grey text */
-    padding: 20px;
+    background: var(--input-background-color); /* Match input fields for consistency */
+    color: var(--text-color);
+    padding: 25px;
     border-radius: var(--border-radius);
     overflow-x: auto;
-    font-size: 0.9em;
-    max-height: 400px;
-    border: 1px solid #4a5568; /* Border matching background */
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1) inset;
+    font-size: 0.92em;
+    line-height: 1.7; /* Better readability for code */
+    max-height: 450px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow-inset);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Responsive adjustments */
+/* --- Theme Switcher --- */
+.theme-switcher-container {
+    position: fixed;
+    top: 22px;
+    right: 35px;
+    z-index: 1000;
+}
+#themeToggleBtn {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 10px 12px; /* Square-ish button */
+    border-radius: 50%; /* Circular button */
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.1s ease;
+    display: flex; /* For centering icon */
+    align-items: center;
+    justify-content: center;
+}
+#themeToggleBtn:hover {
+    background-color: var(--background-color);
+    transform: scale(1.1);
+}
+#themeToggleBtn svg {
+    width: 22px; /* Larger icons */
+    height: 22px;
+    stroke: var(--primary-color); /* Icon color matches primary */
+    transition: stroke 0.3s ease;
+}
+
+/* --- Responsive Adjustments --- */
 @media (max-width: 992px) { /* Tablet */
-    .control-group label {
-        flex-basis: var(--control-label-width-tablet);
-    }
-    .control-group small {
-        padding-left: calc(var(--control-label-width-tablet) + 20px);
-    }
-    .cross-section-visualization {
-        flex-direction: column;
-    }
-     h1 { font-size: 2em; }
-    h2 { font-size: 1.7em; }
-    h3 { font-size: 1.35em; }
+    .container { padding: 25px 30px; }
+    h1 { font-size: 2.2em; }
+    h2 { font-size: 1.8em; }
+    h3 { font-size: 1.45em; }
+    .control-group label { flex-basis: var(--control-label-width-tablet); }
+    .control-group small { padding-left: calc(var(--control-label-width-tablet) + 20px); }
+    .cross-section-visualization { flex-direction: column; }
+    .failure-checks-container li strong { flex-basis: 220px; }
 }
 
 @media (max-width: 768px) { /* Mobile */
     body { padding: 15px; }
     .container { padding: 20px; margin: 10px auto; }
-    h1 { font-size: 1.8em; }
-    h2 { font-size: 1.5em; }
-    h3 { font-size: 1.25em; }
+    h1 { font-size: 1.9em; }
+    h2 { font-size: 1.6em; }
+    h3 { font-size: 1.3em; }
 
-    .control-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .control-group label {
-        margin-bottom: 8px;
-        flex-basis: auto;
-        margin-right: 0;
-    }
-    .control-group .value-display {
-        margin-left: 0;
-        margin-top: 8px;
-        text-align: left; /* Align value left for consistency */
-        display: inline-block; /* Allow it to size to content */
-        width: auto;
-    }
-    .control-group small {
-        padding-left: 0;
-        margin-top: 8px;
-    }
-    .failure-checks-container li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .failure-checks-container li strong {
-        margin-bottom: 8px;
-    }
-    .failure-checks-container li span.status {
-        align-self: flex-start;
-        margin-left: 0;
-        margin-bottom: 8px;
-    }
-    .failure-checks-container li .details {
-        text-align: left;
-        margin-left: 0;
-        padding-left: 0;
-        width: 100%;
-        margin-bottom: 5px;
-    }
-    button#calculateButton {
-        width: 100%;
-        padding: 12px 20px; /* Adjust padding for full width */
-    }
-    #sfdPlot, #bmdPlot, #deflectionPlot {
-        height: 320px; /* Shorter plots on mobile */
-    }
+    .control-group { flex-direction: column; align-items: stretch; }
+    .control-group label { margin-bottom: 8px; flex-basis: auto; margin-right: 0; }
+    .control-group .value-display { margin-left: 0; margin-top: 8px; text-align: left; display: block; width: 100%; }
+    .control-group small { padding-left: 0; margin-top: 8px; }
+    
+    .failure-checks-container li { flex-direction: column; align-items: flex-start; }
+    .failure-checks-container li strong { margin-bottom: 8px; flex-basis: auto; }
+    .failure-checks-container li span.status { align-self: flex-start; margin-left: 0; margin-bottom: 8px; }
+    .failure-checks-container li .details { text-align: left; margin-left: 0; padding-left: 0; width: 100%; margin-bottom: 5px; }
+    
+    button#calculateButton { width: 100%; padding: 14px 20px; font-size: 1.1em; }
+    #sfdPlot, #bmdPlot, #deflectionPlot { height: 350px; }
+
+    .theme-switcher-container { top: 15px; right: 20px; }
+    #themeToggleBtn svg { width: 20px; height: 20px; }
 }

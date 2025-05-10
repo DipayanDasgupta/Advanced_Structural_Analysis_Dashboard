@@ -1,3 +1,4 @@
+
 # core/beam_solvers.py
 import numpy as np
 import math
